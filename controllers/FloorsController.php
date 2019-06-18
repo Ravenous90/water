@@ -2,38 +2,22 @@
 
 namespace app\controllers;
 
+use app\models\Buildings;
 use app\models\SensorsSearch;
 use Yii;
 use app\models\Floors;
 use app\models\FloorsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * FloorsController implements the CRUD actions for Floors model.
- */
 class FloorsController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+        return SiteController::mainBehavior();
     }
 
-    /**
-     * Lists all Floors models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new FloorsSearch();
@@ -45,36 +29,28 @@ class FloorsController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Floors model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         $searchSensorModel = new SensorsSearch();
         $dataProvider = $searchSensorModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->where(['floor_id' => $id]);
 
+        $building_id = Floors::findOne($id)->building_id;
+        $building_obj = Buildings::findOne($building_id);
         return $this->render('view', [
             'model' => $this->findModel($id),
             'searchFloorModel' => $searchSensorModel,
             'dataProvider' => $dataProvider,
+            'building_obj' => $building_obj,
         ]);
     }
 
-    /**
-     * Creates a new Floors model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Floors();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['buildings/view', 'id' => Yii::$app->request->get('id')]);
         }
 
         return $this->render('create', [
@@ -82,13 +58,6 @@ class FloorsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Floors model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -102,27 +71,13 @@ class FloorsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Floors model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['buildings/view', 'id' => Yii::$app->request->get('id')]);
     }
 
-    /**
-     * Finds the Floors model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Floors the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Floors::findOne($id)) !== null) {

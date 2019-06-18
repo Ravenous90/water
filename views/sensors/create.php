@@ -2,12 +2,11 @@
 
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $model app\models\Sensors */
 
 $this->title = 'Create Sensors';
-$this->params['breadcrumbs'][] = ['label' => 'Sensors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Back', 'url' => ['floors/' . $id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sensors-create">

@@ -10,9 +10,10 @@ use Yii;
  * @property int $id
  * @property string $name
  * @property int $floor_id
+ * @property int $user_id
  *
  * @property Floors $floor
- * @property UsersToSensors[] $usersToSensors
+ * @property User $user
  */
 class Sensors extends \yii\db\ActiveRecord
 {
@@ -31,9 +32,10 @@ class Sensors extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['floor_id'], 'integer'],
+            [['floor_id', 'user_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['floor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Floors::className(), 'targetAttribute' => ['floor_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -44,8 +46,9 @@ class Sensors extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Sensor name',
             'floor_id' => 'Floor №',
+            'user_id' => 'Username',
         ];
     }
 
@@ -60,8 +63,23 @@ class Sensors extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsersToSensors()
+    public function getUser()
     {
-        return $this->hasMany(UsersToSensors::className(), ['sensor_id' => 'id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public static function getBuildingBySensorId($id)
+    {
+        $floor_id = self::findOne($id)->floor_id;
+        $building_id = Floors::findOne($floor_id)->building_id;
+        $building_obj = Buildings::findOne($building_id);
+        return $building_obj;
+    }
+
+    public static function getBuildingByFloorId($floor_id)
+    {
+        $building_id = Floors::findOne($floor_id)->building_id;
+        $building_obj = Buildings::findOne($building_id);
+        return $building_obj;
     }
 }

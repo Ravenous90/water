@@ -5,16 +5,17 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Sensors */
-/* @var $isUsersSensor app\controllers\SensorsController */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Sensors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $building_obj->name, 'url' => ['buildings/' . $building_obj->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Floor №' . $floor_obj->name, 'url' => ['floors/' . $floor_obj->id]];
 $this->params['breadcrumbs'][] = $this->title;
+\yii\web\YiiAsset::register($this);
 ?>
 <div class="sensors-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-<?php if ($isUsersSensor): ?>
+
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -25,13 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-<?php endif; ?>
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'name',
-            'floor_id',
+            'floor.name',
+            'user.username',
         ],
     ]) ?>
+
 </div>

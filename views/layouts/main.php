@@ -39,15 +39,16 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-left'],
         'items' => [
-            !Yii::$app->user->isGuest ? (
-                User::isUserAdmin(Yii::$app->user->identity->username) ? (
-                    ['label' => 'Buildings', 'url' => ['/buildings/index']]
+            ['label' => 'Buildings', 'url' => ['/buildings/index']],
+                !Yii::$app->user->isGuest ? (
+                    User::isUserAdmin(Yii::$app->user->identity->getId()) ? (
+                        ['label' => 'All sensors', 'url' => ['/sensors/index']]
+                    ) : (
+                        ['label' => 'My sensors', 'url' => ['/sensors/my_sensors']]
+                    )
                 ) : (
-                    ['label' => 'My sensors', 'url' => ['/sensors/index']]
-                )
-            ) : (
                 ''
-            ),
+                )
         ],
     ]);
     echo Nav::widget([

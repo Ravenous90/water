@@ -2,38 +2,21 @@
 
 namespace app\controllers;
 
-use app\models\Floors;
 use Yii;
 use app\models\Buildings;
 use app\models\BuildingsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use app\models\FloorsSearch;
-/**
- * BuildingsController implements the CRUD actions for Buildings model.
- */
+
 class BuildingsController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+        return SiteController::mainBehavior();
     }
 
-    /**
-     * Lists all Buildings models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new BuildingsSearch();
@@ -45,12 +28,6 @@ class BuildingsController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Buildings model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         $searchFloorModel = new FloorsSearch();
@@ -64,11 +41,6 @@ class BuildingsController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Buildings model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Buildings();
@@ -82,13 +54,6 @@ class BuildingsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Buildings model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -102,13 +67,6 @@ class BuildingsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Buildings model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -116,13 +74,6 @@ class BuildingsController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Buildings model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Buildings the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Buildings::findOne($id)) !== null) {

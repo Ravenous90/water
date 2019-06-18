@@ -40,7 +40,7 @@ class Buildings extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Building name',
         ];
     }
 

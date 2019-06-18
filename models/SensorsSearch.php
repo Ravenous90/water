@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Sensors;
@@ -18,7 +17,7 @@ class SensorsSearch extends Sensors
     public function rules()
     {
         return [
-            [['id', 'floor_id'], 'integer'],
+            [['id', 'floor_id', 'user_id'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -61,6 +60,7 @@ class SensorsSearch extends Sensors
         $query->andFilterWhere([
             'id' => $this->id,
             'floor_id' => $this->floor_id,
+            'user_id' => $this->user_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

@@ -6,8 +6,8 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Floors */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Floors', 'url' => ['index']];
+$this->title = 'Floor №' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => $building_obj->name, 'url' => ['buildings/' . $building_obj->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="floors-view">
@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Update floor', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete floor', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -38,5 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <p>
+        <?= Html::a('Create Sensor', ['sensors/create', 'id' => Yii::$app->request->get('id')], ['class' => 'btn btn-success']) ?>
+    </p>
 
 </div>

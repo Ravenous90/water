@@ -29,10 +29,7 @@ class m190525_095647_main_migrate extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
             'floor_id' => $this->integer(),
-        ]);
-        $this->createTable('users_to_sensors', [
-            'user_id' => $this->integer()->notNull(),
-            'sensor_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer(),
         ]);
 
         $this->createIndex(
@@ -49,12 +46,12 @@ class m190525_095647_main_migrate extends Migration
             'CASCADE'
         );
         $this->createIndex(
-            'idx-floor_id',
+            'idx-floors-building_id',
             'floors',
             'building_id'
         );
         $this->addForeignKey(
-            'fk-floor_id',
+            'fk-floors-building_id',
             'floors',
             'building_id',
             'buildings',
@@ -62,12 +59,12 @@ class m190525_095647_main_migrate extends Migration
             'CASCADE'
         );
         $this->createIndex(
-            'idx-sensor_id',
+            'idx-sensors-floor_id',
             'sensors',
             'floor_id'
         );
         $this->addForeignKey(
-            'fk-sensor_id',
+            'fk-sensors-floor_id',
             'sensors',
             'floor_id',
             'floors',
@@ -75,38 +72,21 @@ class m190525_095647_main_migrate extends Migration
             'CASCADE'
         );
         $this->createIndex(
-            'idx-users_to_sensors-user_id',
-            'users_to_sensors',
+            'idx-sensors-user_id',
+            'sensors',
             'user_id'
         );
         $this->addForeignKey(
-            'fk-users_to_sensors-user_id',
-            'users_to_sensors',
+            'fk-sensors-user_id',
+            'sensors',
             'user_id',
             'users',
-            'id',
-            'CASCADE'
-        );
-        $this->createIndex(
-            'idx-users_to_sensors-sensor_id',
-            'users_to_sensors',
-            'sensor_id'
-        );
-        $this->addForeignKey(
-            'fk-users_to_sensors-sensor_id',
-            'users_to_sensors',
-            'sensor_id',
-            'sensors',
             'id',
             'CASCADE'
         );
         $this->insert(
             'roles',
             ['name' => 'admin']
-        );
-        $this->insert(
-            'roles',
-            ['name' => 'user']
         );
         $this->insert(
             'roles',
@@ -150,16 +130,8 @@ class m190525_095647_main_migrate extends Migration
                 'sensors',
                 [
                     'name' => $faker->text(10) . '#' . $faker->numberBetween(1, 600),
-                    'floor_id' => (int)$faker->numberBetween(1, 50)
-                ]
-            );
-        }
-        for ($j = 1; $j <= 100; $j++) {
-            $this->insert(
-                'users_to_sensors',
-                [
+                    'floor_id' => (int)$faker->numberBetween(1, 50),
                     'user_id' => (int)$faker->numberBetween(2, 11),
-                    'sensor_id' => (int)$faker->numberBetween(1, 300)
                 ]
             );
         }
@@ -171,52 +143,42 @@ class m190525_095647_main_migrate extends Migration
     public function safeDown()
     {
         $this->dropForeignKey(
-            'fk-users_to_sensors-sensor_id',
-            'users_to_sensors'
-        );
-        $this->dropIndex(
-            'idx-users_to_sensors-sensor_id',
-            'users_to_sensors'
-        );
-        $this->dropForeignKey(
-            'fk-users_to_sensors-user_id',
-            'users_to_sensors'
-        );
-        $this->dropIndex(
-            'idx-users_to_sensors-user_id',
-            'users_to_sensors'
-        );
-        $this->dropForeignKey(
-            'fk-sensor_id',
+            'fk-sensors-user_id',
             'sensors'
         );
         $this->dropIndex(
-            'idx-sensor_id',
+            'idx-sensors-user_id',
             'sensors'
         );
         $this->dropForeignKey(
-            'fk-floor_id',
+            'fk-sensors-floor_id',
+            'sensors'
+        );
+        $this->dropIndex(
+            'idx-sensors-floor_id',
+            'sensors'
+        );
+        $this->dropForeignKey(
+            'fk-floors-building_id',
             'floors'
         );
         $this->dropIndex(
-            'idx-floor_id',
+            'idx-floors-building_id',
             'floors'
         );
         $this->dropForeignKey(
-            'fk-role_id',
+            'fk-users-role_id',
             'users'
         );
         $this->dropIndex(
-            'idx-role_id',
+            'idx-users-role_id',
             'users'
         );
-
 
         $this->dropTable('users');
         $this->dropTable('roles');
         $this->dropTable('buildings');
         $this->dropTable('floors');
         $this->dropTable('sensors');
-        $this->dropTable('users_to_sensors');
     }
 }

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BuildingsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,12 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'name',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+
     <?php Pjax::end(); ?>
 </div>

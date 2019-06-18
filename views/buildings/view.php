@@ -37,4 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+    <p>
+        <?= Html::a('Create Floor', ['floors/create', 'id' => Yii::$app->request->get('id')], ['class' => 'btn btn-success']) ?>
+    </p>
+
 </div>

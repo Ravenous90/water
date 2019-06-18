@@ -46,9 +46,9 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->id;
     }
 
-    public static function isUserAdmin($username)
+    public static function isUserAdmin($id)
     {
-        if (static::findOne(['username' => $username, 'role_id' => self::ROLE_ADMIN]))
+        if (static::findOne(['id' => $id, 'role_id' => self::ROLE_ADMIN]))
         {
             return true;
         } else {
@@ -59,4 +59,12 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey() {}
     public static function findIdentityByAccessToken($token, $type = null){}
     public function validateAuthKey($authKey) {}
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Username',
+            'role_id' => 'Role',
+        ];
+    }
 }
